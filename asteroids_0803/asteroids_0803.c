@@ -426,7 +426,7 @@ void main(void)
 
         if (pulses > 0)
         {
-            sound(pulses);
+            //sound(pulses);
             pulses--;
         }
 

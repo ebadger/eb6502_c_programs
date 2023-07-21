@@ -4,56 +4,48 @@
 #include "delay.h"
 #include "test_pin.h"
 
-#define JOYSTICK_BUTTON0_ADDR 0xC061
-#define JOYSTICK_BUTTON1_ADDR 0xC062
-#define JOYSTICK_PADDLE0_ADDR 0xC064
-#define JOYSTICK_PADDLE1_ADDR 0xC065
-
-#define JOYSTICK_TIMER_RESET_ADDR 0xC070
-
-#define JOYSTICK_FIRE (PEEK(JOYSTICK_BUTTON0_ADDR) > 127 ? 1 : 0)
-#define JOYSTICK_START POKE(JOYSTICK_TIMER_RESET_ADDR, 0)
-#define JOYSTICK_LEFT (PEEK(JOYSTICK_PADDLE0_ADDR) > 127 ? 0 : 1)
-#define JOYSTICK_RIGHT (PEEK(JOYSTICK_PADDLE0_ADDR) > 127 ? 1 : 0)
-#define JOYSTICK_UP (PEEK(JOYSTICK_PADDLE1_ADDR) > 127 ? 0 : 1)
-#define JOYSTICK_DOWN (PEEK(JOYSTICK_PADDLE1_ADDR) > 127 ? 1 : 0)
+#define KEYBOARD_LAST_KEY     0xD2
 
 uint8_t left = 0;
 uint8_t right = 0;
 uint8_t up = 0;
 uint8_t down = 0;
+uint8_t fire = 0;
 
 void joystick_run(void)
 {
 
-    JOYSTICK_START;
-    delay_100us();
-    delay_100us();
-    delay_100us();
-    delay_100us();
-    delay_100us();
-    delay_100us();
-    delay_100us();
-    delay_100us();
-    delay_100us();
-    left = JOYSTICK_LEFT;
-    up = JOYSTICK_UP;
-    delay_100us();
-    delay_100us();
-    delay_100us();
-    delay_100us();
-    delay_100us();
-    delay_100us();
-    delay_100us();
-    delay_100us();
-    delay_100us();
-    right = JOYSTICK_RIGHT;
-    down = JOYSTICK_DOWN;
+    __asm__ ("jsr $F651");
+
+    left = 0;
+    up = 0;
+    right = 0;
+    down = 0;
+    fire = 0;
+
+    switch(PEEK(KEYBOARD_LAST_KEY))
+    {
+        case 'W':
+           up = 1;
+           break;
+        case 'A':
+           left = 1;
+           break;
+        case 'S':
+           down = 1;
+           break;
+        case 'D':
+           right = 1;
+           break;
+        case ' ':
+           fire = 1;
+           break;        
+    }
 }
 
 uint8_t joystick_fire_get(void)
 {
-    return JOYSTICK_FIRE;
+    return fire;
 }
 
 uint8_t joystick_up_get(void)

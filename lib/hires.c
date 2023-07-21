@@ -12,8 +12,10 @@ void hires_clr(void)
 {
     // 77.9ms
     memset((uint8_t *)HGR1SCRN, 0, HGR_SCRN_LEN); // clear page 1
-    STROBE(HIRES);
-    STROBE(TXTCLR);
+    __asm__ ("pha");
+    __asm__ ("lda #$80");
+    __asm__ ("sta $C043");
+    __asm__ ("pla");
 }
 
 void hires_hline(uint8_t column, uint8_t row, uint8_t length, uint8_t pixels)

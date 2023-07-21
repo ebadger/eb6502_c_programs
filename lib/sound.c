@@ -3,7 +3,7 @@
 #include "delay.h"
 #include "test_pin.h"
 
-#define SPEAKER_ADDR 0xC030
+#define SPEAKER_ADDR 0xC050
 #define SOUND_TOGGLE POKE(SPEAKER_ADDR, 0)
 
 void sound(uint8_t pulses, uint8_t delay)

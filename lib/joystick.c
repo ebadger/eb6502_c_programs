@@ -15,7 +15,7 @@ uint8_t fire = 0;
 void joystick_run(void)
 {
 
-    __asm__ ("jsr $F651");
+    __asm__ ("jsr $C11E");
 
     left = 0;
     up = 0;
@@ -26,15 +26,19 @@ void joystick_run(void)
     switch(PEEK(KEYBOARD_LAST_KEY))
     {
         case 'W':
+        case 'w':
            up = 1;
            break;
         case 'A':
+        case 'a':
            left = 1;
            break;
         case 'S':
+        case 's':
            down = 1;
            break;
         case 'D':
+        case 'd':
            right = 1;
            break;
         case ' ':
